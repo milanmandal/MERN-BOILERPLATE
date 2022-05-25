@@ -53,19 +53,21 @@ const pushData = (req,res)=>{
 }
 
 const updateData = (req,res)=>{
-    Goal.findOneAndUpdate({user:req.body.user},req.body,function(err,goal){
+    Goal.findOneAndUpdate({_id:req.body._id},req.body,function(err,goal){
         if(err){
             res.status(400)
             .json({
                 message:"Error"+err,
                 updateSuccess:false,
+                goal:null
             });
         }
         else{
             res.status(200)
             .json({
                 updateSuccess:true,
-                message:"Data updated successfully"
+                message:"Data updated successfully",
+                goal:goal
             });
         }
     })
@@ -73,7 +75,7 @@ const updateData = (req,res)=>{
 
 const deleteData = (req,res)=>{
     Goal.findById(req.body._id,function(err,goal){
-        if(err){
+        if(err || !goal){
             res.status(400)
             .json({
                 message:"Error"+err,
@@ -81,6 +83,24 @@ const deleteData = (req,res)=>{
             });
         }
         else{
+            if(!req.user)
+            {
+                res.status(400)
+                .json({
+                    message:"User not found",
+                    deleteSuccess:false,
+                });
+            }
+
+            if(req.user._id.toString() !== goal.user.toString())
+            {
+                res.status(400)
+                .json({
+                    message:"User not authorized",
+                    deleteSuccess:false,
+                });
+            }
+
             goal.remove();
             res.status(200)
             .json({
@@ -91,3 +111,10 @@ const deleteData = (req,res)=>{
     })
 }
 
+
+mosule.exports = {
+    getData,
+    pushData,
+    updateData,
+    deleteData
+}
