@@ -11,14 +11,13 @@ const goalSchema = mongoose.Schema({
         type:String,
         required:true,
     },
-    category:[{
-        data1:{
-            type:String
-        },
-        data2:{
-            type:String
-        }
-    }]
+    category:{
+        type:Array[String] =[{
+            data:{
+                type:String,
+            }
+        }]
+    }
 })
 
 module.exports = mongoose.model('Goal',goalSchema);

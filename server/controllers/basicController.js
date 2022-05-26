@@ -41,7 +41,7 @@ const pushData = (req,res)=>{
 }
 
 const updateData = (req,res)=>{
-    Data.findOneAndUpdate({_id:req.user._id},req.body,function(err,data){
+    Data.findOneAndUpdate({_id:req.body._id},req.body,function(err,data){
         if(err){
             res.status(400)
             .json({
@@ -55,7 +55,6 @@ const updateData = (req,res)=>{
             .json({
                 updateSuccess:true,
                 message:"Data updated successfully",
-                data:data
             });
         }
     })

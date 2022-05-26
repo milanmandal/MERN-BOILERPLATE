@@ -98,7 +98,7 @@ const logout = (req,res)=>{
                 message:"Error"+err
             });
         }
-        res.status(200)
+        res.clearCookie("user_auth").status(200)
         .send({
             logoutSuccess:true,
             message:"Logout Successful"
