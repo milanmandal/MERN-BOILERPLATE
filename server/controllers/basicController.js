@@ -1,7 +1,7 @@
 const Data = require('../models/basicModel');
 
 const getData = (req,res)=>{
-    Data.findOne({user:req.body.user},function(err,data){
+    Data.find({user:req.user._id},function(err,data){
         if(err){
             res.status(400)
             .json({
@@ -22,37 +22,26 @@ const getData = (req,res)=>{
 }
 
 const pushData = (req,res)=>{
-    Data.findOne({user:req.body.user},function(err,data){
-        if(err){
-            res.status(400)
-            .json({
-                message:"Error" +err,
-                pushSuccess:false,
-            });
-        }
-        else{
-            const data = new Data(req.body);
-            data.save()
-            .then(()=>{
-                res.status(200)
-                .json({
-                    pushSuccess:true,
-                    message:"Data pushed successfully"
-                });
-            })
-            .catch(err=>{
-                res.status(400)
-                .json({
-                    pushSuccess:false,
-                    message:"Error"+err
-                });
-            })
-        }
+    const data = new Data(req.body);
+    data.save()
+    .then(()=>{
+        res.status(200)
+        .json({
+            pushSuccess:true,
+            message:"Data pushed successfully"
+        });
+    })
+    .catch(err=>{
+        res.status(400)
+        .json({
+            pushSuccess:false,
+            message:"Error"+err
+        });
     })
 }
 
 const updateData = (req,res)=>{
-    Data.findOneAndUpdate({_id:req.body._id},req.body,function(err,data){
+    Data.findOneAndUpdate({_id:req.user._id},req.body,function(err,data){
         if(err){
             res.status(400)
             .json({
@@ -82,6 +71,8 @@ const deleteData = (req,res)=>{
             });
         }
         else{
+
+            //check if user exists
             if(!req.user)
             {
                 res.status(400)
@@ -91,6 +82,7 @@ const deleteData = (req,res)=>{
                 });
             }
 
+            //check if user is the owner of the data
             if(req.user._id.toString() !== data.user.toString())
             {
                 res.status(400)
@@ -100,6 +92,7 @@ const deleteData = (req,res)=>{
                 });
             }
 
+            //delete data
             data.remove();
             res.status(200)
             .json({
@@ -111,7 +104,7 @@ const deleteData = (req,res)=>{
 }
 
 
-mosule.exports = {
+module.exports = {
     getData,
     pushData,
     updateData,
