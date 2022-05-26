@@ -1,14 +1,13 @@
-const Goal = require('../models/goal');
-const User = require('../models/userModel');
+const Data = require('../models/basicModel');
 
 const getData = (req,res)=>{
-    Goal.findOne({user:req.body.user},function(err,goal){
+    Data.findOne({user:req.body.user},function(err,data){
         if(err){
             res.status(400)
             .json({
                 message:"Error",
                 getSuccess:false,
-                goal:null
+                data:null
             });
         }
         else{
@@ -16,14 +15,14 @@ const getData = (req,res)=>{
             .json({
                 getSuccess:true,
                 message:"Data retrieved successfully",
-                goal:goal
+                data:data
             });
         }
     })
 }
 
 const pushData = (req,res)=>{
-    Goal.findOne({user:req.body.user},function(err,goal){
+    Data.findOne({user:req.body.user},function(err,data){
         if(err){
             res.status(400)
             .json({
@@ -32,8 +31,8 @@ const pushData = (req,res)=>{
             });
         }
         else{
-            const goal = new Goal(req.body);
-            goal.save()
+            const data = new Data(req.body);
+            data.save()
             .then(()=>{
                 res.status(200)
                 .json({
@@ -53,13 +52,13 @@ const pushData = (req,res)=>{
 }
 
 const updateData = (req,res)=>{
-    Goal.findOneAndUpdate({_id:req.body._id},req.body,function(err,goal){
+    Data.findOneAndUpdate({_id:req.body._id},req.body,function(err,data){
         if(err){
             res.status(400)
             .json({
                 message:"Error"+err,
                 updateSuccess:false,
-                goal:null
+                data:null
             });
         }
         else{
@@ -67,15 +66,15 @@ const updateData = (req,res)=>{
             .json({
                 updateSuccess:true,
                 message:"Data updated successfully",
-                goal:goal
+                data:data
             });
         }
     })
 }
 
 const deleteData = (req,res)=>{
-    Goal.findById(req.body._id,function(err,goal){
-        if(err || !goal){
+    Data.findById(req.body._id,function(err,data){
+        if(err || !data){
             res.status(400)
             .json({
                 message:"Error"+err,
@@ -92,7 +91,7 @@ const deleteData = (req,res)=>{
                 });
             }
 
-            if(req.user._id.toString() !== goal.user.toString())
+            if(req.user._id.toString() !== data.user.toString())
             {
                 res.status(400)
                 .json({
@@ -101,7 +100,7 @@ const deleteData = (req,res)=>{
                 });
             }
 
-            goal.remove();
+            data.remove();
             res.status(200)
             .json({
                 deleteSuccess:true,

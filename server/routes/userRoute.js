@@ -18,6 +18,6 @@ router.route('/register').post(register);
 router.route('/login').post(login);
 
 //LOGOUT ROUTE
-router.route("/logout").get(logout);
+router.route("/logout").get(auth,logout);
 
 module.exports = router;

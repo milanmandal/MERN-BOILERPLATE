@@ -43,7 +43,6 @@ const register = (req,res)=>{
 }
 
 const login = (req,res)=>{
-    console.log(req.body);
     const {username,password} = req.body;
      //find the user
      User.findOne({username:username},function(err,user){
