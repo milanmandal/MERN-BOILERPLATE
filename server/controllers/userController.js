@@ -18,27 +18,51 @@ const authenticate = (req,res)=>{
 
 const register = (req,res)=>{
     const user = new User(req.body);
+    //check username exist
+    User.findOne({username:user.username},function(err,doc){
+        if(doc){
+            res.json({
+                message:"Username already exists",
+                registerSuccess:false
+            });
+        }
+        else{
+            //check email exist
+            User.findOne({email:user.email},function(err,doc){
+                if(doc){
+                    res.json({
+                        message:"Email already exists",
+                        registerSuccess:false
+                    });
+                }
+                else{
+                    //hash password
+                    bcrypt.genSalt(10,(err,salt)=>{
+                        bcrypt.hash(user.password,salt,(err,hash)=>{
+                            if(err) throw err;
+                            user.password = hash;
 
-    bcrypt.genSalt(10,(err,salt)=>{
-        bcrypt.hash(user.password,salt,(err,hash)=>{
-            if(err) throw err;
-            user.password = hash;
-            user.save()
-            .then(()=>{
-                res.status(200)
-                .json({
-                    registerSuccess:true,
-                    message:"User registered successfully"
-                });
+                            //save user
+                            user.save()
+                            .then(()=>{
+                                res.status(200)
+                                .json({
+                                    registerSuccess:true,
+                                    message:"User registered successfully"
+                                });
+                            })
+                            .catch(err=>{
+                                res.status(400)
+                                .json({
+                                    registerSuccess:false,
+                                    message:"Error"+err
+                                });
+                            })
+                        })
+                    })
+                }
             })
-            .catch(err=>{
-                res.status(400)
-                .json({
-                    registerSuccess:false,
-                    message:"Error"+err
-                });
-            })
-        })
+        }
     })
 }
 
@@ -68,7 +92,8 @@ const login = (req,res)=>{
                         res.cookie("user_auth",user.token).status(200)
                         .json({
                             message:"Login Successful",
-                            loginSuccess:true
+                            loginSuccess:true,
+                            token:token
                         })
                     )
                     .catch(err=>{
