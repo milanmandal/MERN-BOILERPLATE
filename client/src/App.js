@@ -4,6 +4,7 @@ import Login from './components/login/Login';
 import Register from './components/register/Register';
 import Landing from './components/landing/Landing';
 function App() {
+  
   return (
     <div>
       <Router>

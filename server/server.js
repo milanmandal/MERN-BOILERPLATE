@@ -15,14 +15,15 @@ app.use(cookieParser());
 connectDB();
 
 app.get('/',function(req,res){
-    res.send('Server is running');
+    res.cookie('cookie','this is a cookie')
+    res.json({message:`Server is running and ${JSON.stringify(req.cookies.cookie)}`});
 })
 
 //MIDDLEWARE
 const User = require('./routes/userRoute');
 const Basic = require('./routes/basicRoute');
 
-//SERVER ROUTES
+//SERVER ROUTES  
 app.use('/user',User);
 app.use('/goal',Basic);
 

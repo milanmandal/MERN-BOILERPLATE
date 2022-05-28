@@ -26,12 +26,12 @@ const register = (req,res)=>{
                 registerSuccess:false
             });
         }
-        else{
+        else{ 
             //check email exist
-            User.findOne({email:user.email},function(err,doc){
+            User.findOne({email:user.email},function(err,doc){ 
                 if(doc){
                     res.json({
-                        message:"Email already exists",
+                        message:"Email already exists", 
                         registerSuccess:false
                     });
                 }
@@ -89,12 +89,8 @@ const login = (req,res)=>{
                     user.save()
                     .then(
                         //store in cookie
-                        res.cookie("user_auth",user.token).status(200)
-                        .json({
-                            message:"Login Successful",
-                            loginSuccess:true,
-                            token:token
-                        })
+                        res.cookie('user_auth',token,{httpOnly: true}),
+                        console.log(req.cookies['user_auth']),
                     )
                     .catch(err=>{
                         res.status(400)
@@ -118,7 +114,7 @@ const login = (req,res)=>{
 const logout = (req,res)=>{
     User.findOneAndUpdate({_id:req.user._id},{token:""},function(err,doc){
         if(err){
-            res.json({
+            res.json({ 
                 logoutSuccess:false,
                 message:"Error"+err
             });
