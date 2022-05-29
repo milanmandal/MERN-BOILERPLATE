@@ -1,9 +1,9 @@
 const User = require("../models/userModel");
 const jwt = require("jsonwebtoken");
 
-let auth =  (req,res,next)=>{
-    // let token = req.cookies.user_auth;
-    let token = req.body;
+const auth =  (req,res,next)=>{
+    
+    const token = req.header("authorization");
     jwt.verify(token,process.env.SECRET_KEY, function(err, decode){
         User.findOne({"_id":decode,"token":token}, function(err,user){
             if(err) throw err;

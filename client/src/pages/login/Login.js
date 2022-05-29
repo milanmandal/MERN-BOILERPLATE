@@ -5,7 +5,6 @@ function Login() {
 
     const [password, setPassword] = useState('');
     const [username, setUsername] = useState('');
-
     const onSubmit =(e) => {
         e.preventDefault();
         const user = {
@@ -14,8 +13,10 @@ function Login() {
         }
         axios.post('http://localhost:8000/user/login', user)
         .then(res=>{
+            // console.log(res.data);
             if(res.data.loginSuccess){
-                console.log(res);
+                localStorage.setItem("token", res.data.token);
+                window.location = '/home';
             }
             else{
                 window.alert(res.data.message); 

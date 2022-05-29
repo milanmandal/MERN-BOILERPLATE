@@ -2,10 +2,14 @@ import axios from 'axios'
 function Logout() {
 
     const logout = () => {
-        axios.get('http://localhost:8000/user/logout')
+        const headers = {
+            'authorization': localStorage.getItem('token')
+        }
+        axios.get('http://localhost:8000/user/logout',{headers: headers})
         .then(res=>{
             if(res.data.logoutSuccess){
-                window.location = '/login';
+                localStorage.removeItem('token');
+                window.location = '/';
             }
             else{
                 window.alert(res.data.message);

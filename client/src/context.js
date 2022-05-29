@@ -1,25 +1,20 @@
-import axios from 'axios';
 import {createContext} from 'react';
 import {useReducer} from 'react';
-
-let user = null
 
 export const AuthContext = createContext();
 
 const INITIAL_STATE = {
-  isAuth: user ? true : false,
-  username: user ? user.username : null,
-  id: user ? user._id : null,
+  isAuth: false,
+  token:null
 };
 
 const authReducer = (state, action) => {
   switch (action.type) {
     case 'LOGIN':
-      axios.get('http://localhost:8000/user/auth',)
-      .then(res => {
-        user = res.data;
-      })
-      return {state}
+      return (
+        state.isAuth= true,
+        state.token= action.payload.token
+      )
     case 'LOGOUT':
       return{state}
     default: 
@@ -28,8 +23,8 @@ const authReducer = (state, action) => {
 };
 
 export const AuthProvider=(props)=>{
-    const [state,dispatch] =useReducer(authReducer,INITIAL_STATE);
+    const [state,dispatch] = useReducer(authReducer,INITIAL_STATE);
     return(
-        <AuthContext.Provider value={{state,dispatch}}>{props.children}</AuthContext.Provider>
+      <AuthContext.Provider value={{state,dispatch}}>{props.children}</AuthContext.Provider>
     )
 }

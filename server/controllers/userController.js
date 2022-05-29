@@ -68,6 +68,7 @@ const register = (req,res)=>{
 
 const login = (req,res)=>{
     const {username,password} = req.body;
+    console.log(req.body)
      //find the user
      User.findOne({username:username},function(err,user){
         if(!user)
@@ -88,9 +89,12 @@ const login = (req,res)=>{
                     user.token = token;
                     user.save()
                     .then(
-                        //store in cookie
-                        res.cookie('user_auth',token,{httpOnly: true}),
-                        console.log(req.cookies['user_auth']),
+                        //store in cookie 
+                        res.cookie('user_auth',token).json({
+                            loginSuccess:true,
+                            message:"Login Successful",
+                            token:token
+                        })
                     )
                     .catch(err=>{
                         res.status(400)

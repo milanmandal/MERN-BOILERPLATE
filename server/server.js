@@ -15,8 +15,7 @@ app.use(cookieParser());
 connectDB();
 
 app.get('/',function(req,res){
-    res.cookie('cookie','this is a cookie')
-    res.json({message:`Server is running and ${JSON.stringify(req.cookies.cookie)}`});
+    res.json({message:`Server is running`});
 })
 
 //MIDDLEWARE
