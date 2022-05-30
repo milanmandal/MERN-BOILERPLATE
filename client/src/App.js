@@ -3,12 +3,16 @@ import Home from './pages/home/Home';
 import Login from './pages/login/Login';
 import Register from './pages/register/Register';
 import Landing from './pages/landing/Landing';
-function App() {
-  
+import Navbar from './components/navbar/Navbar';
+
+function App() {  
   return (
     <div>
+      
       <Router>
+      <Navbar/>
         <Routes>
+          
           <Route path='/' element={<Landing/>} />
           <Route path='/home' element={<Home/>} />
           <Route path='/login' element={<Login/>} />

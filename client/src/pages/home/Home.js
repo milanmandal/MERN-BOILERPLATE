@@ -6,24 +6,19 @@ import Spinner from '../../components/spinner/Spinner';
 function Home() {
  
   const [islogged, setIslogged] = useState(false);
-  
-  let user = null;
-  const authenticate = async()=>{
-    user = await auth();
-    console.log(user)
-    if(user.isAuth){
-      setIslogged(true);
-    }
+  async function checkAuth() {
+    const isAuth = await auth();
+    setIslogged(isAuth);
   }
-
   useEffect(() => {
-    authenticate();
+    checkAuth();
   })
 
   return(
     islogged?
     <div>
       <h1>Welcome</h1>
+      <input/>
       <Logout/>
     </div>
     :
